@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { PetInputComponent } from './pet-input/pet-input.component';
 
 @Component({
   selector: 'app-root',

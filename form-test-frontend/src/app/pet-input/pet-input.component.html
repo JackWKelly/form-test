@@ -1,0 +1,70 @@
+<h2>
+  Pet Input:
+</h2>
+
+<form [formGroup]="petForm" (ngSubmit)="onSubmit()">
+
+  <label>
+    Pet Name:
+    <input type="text" formControlName="petName" required>
+
+  </label>
+
+  <label>
+    Pet Age:
+    <input type="number" formControlName="petAge">
+
+  </label>
+
+  <label>
+      Pet Species:
+      <input type="text" formControlName="petSpecies">
+  
+    </label>
+
+  <div formGroupName="petDetails">
+
+    <label>
+      Pet Legs:
+    <input type="number" formControlName="petLegs">
+    
+    </label>
+      
+    <label>
+      Pet Colour:
+    <input type="text" formControlName="petColour">
+    </label>
+
+    <label>
+        Pet Tail:
+      <input type="number" formControlName="petTail">
+      </label>
+
+  </div>
+
+  <button type="submit" [disabled]="!petForm.valid">Submit</button>
+
+</form>
+
+<div *ngIf="petForm.invalid && (petForm.dirty || petForm.touched)"
+    class="alert alert-danger">
+
+  <div *ngIf="petForm.controls.petName.errors && petForm.controls.petName.errors.required">
+    Name is required.
+  </div>
+
+  <div *ngIf="petForm.controls.petSpecies.errors && petForm.controls.petSpecies.errors.required">
+      Species is required.
+  </div>
+
+  <div *ngIf="petForm.controls.petSpecies.errors && petForm.controls.petSpecies.errors.forbiddenSpecies">
+      No cats allowed
+  </div>
+</div>
+
+<p>Name Value:</p>
+<p>{{petForm.controls.petName.value}}</p>
+
+<p>
+    Form Status: {{ petForm.status }}
+</p>
