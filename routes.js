@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const controller = require('./controller');
 
-router.get('/listorders', controller.listOrders);
+router.post('/add', controller.addPet);
+//router.get('/add', controller.addPet);
 
-router.get('/totalCost/:id', controller.totalCost);
 
 module.exports = router;

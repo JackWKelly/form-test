@@ -1,18 +1,13 @@
 const services = require('./services');
 
+
 var exports = module.exports = {};
 
-exports.listOrders = function(req, res) {
-    services.readOrders()
+exports.addPet = function(req, res) {
+    console.log(req.body);
+    services.addPet(req.body)
         .then(function(data){
             res.send(data);
         })
 }
 
-exports.totalCost = function(req, res) {
-    let orderNumber = req.params.id;
-    services.getTotalCost(orderNumber)
-        .then(function(data){
-            res.send(data);
-        })
-}

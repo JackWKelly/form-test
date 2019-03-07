@@ -1,52 +1,69 @@
-const mysql = require('mysql');
-const sqlCon = mysql.createConnection({
-    host: "localhost",
-    user: "nodejs",
-    password: "NodeJSPassword2019",
-    database: "ordernormdb"
+var exports = module.exports = {};
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize('petdb', 'nodejs', 'NodeJSPassword2019', {
+  host: 'localhost',
+  dialect: 'mysql',
+  operatorsAliases: false,
+
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
+  },
+
 });
 
-var exports = module.exports = {};
+const Pet = sequelize.define('pet', {
+    petName: {
+        type: Sequelize.STRING
+    },
+    petAge: {
+        type: Sequelize.INTEGER        
+    },
+    petSpecies: {
+        type: Sequelize.STRING        
+    },
+    petLegs: {
+        type: Sequelize.INTEGER        
+    },
+    petColour: {
+        type: Sequelize.STRING        
+    },
+    petTail: {
+        type: Sequelize.INTEGER        
+    }
+});
 
-exports.connectTest = function(){
-        console.log("SQL connected");
-        return("SQL connected");
-    
-}
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Connection has been established successfully.');
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });
 
-exports.readOrders = function(){
-        return new Promise(function(resolve, reject){
-                sqlCon.query("SELECT * FROM orders;", function (err, result, fields) {
-                if (err) reject(err);
-                const objectifyRawPacket = row => ({...row}); //some magic suggested by stackoverflow
-                let resultJson = result.map(objectifyRawPacket);
-                console.log(resultJson);
-                resolve(resultJson);
-            })
-        })
-}
+Pet.sync({force:true}).then(() => {
+    console.log("Pet table recreated.");
+});
 
-exports.getTotalCost = function(orderNumber){
-    return new Promise(function(resolve, reject){
-            sqlCon.query(`
-            #find the cost of a given order
-            SELECT SUM(unitCost) AS total
-            FROM
-            (SELECT item.itemCost * itemOrder.itemQuantity AS unitCost
-            FROM  
-                itemOrder
-                    INNER JOIN
-                item ON itemOrder.itemName = item.itemName
-            WHERE
-                itemOrder.orderNumber = ${orderNumber}
-            ) as findCost;`
-                , function (err, result, fields) {
-                if (err) reject(err);
+/*Pet.sync({force: true}).then(() => {
+    //table created
+    return Pet.create({
+        petName: 'Geoff',
+        petSpecies: 'Dog'
+    });
+});*/
 
-                const objectifyRawPacket = row => ({...row}); //some magic suggested by stackoverflow
-                let resultJson = result.map(objectifyRawPacket);
-                resolve(resultJson);
-                }
-            )
-    })
+exports.addPet = function(pet){
+    return Pet.create({
+        petName: pet.petName,
+        petAge: pet.petAge,
+        petSpecies: pet.petSpecies,
+        petLegs: pet.petDetails.petLegs,
+        petColour: pet.petDetails.petColour,
+        petTail: pet.petDetails.petTail
+    });
+
 }

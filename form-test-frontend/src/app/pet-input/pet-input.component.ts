@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
+import { Pet } from '../petModel';
+import { DatabaseServiceService } from '../database-service.service';
 
 @Component({
   selector: 'app-pet-input',
@@ -19,14 +21,19 @@ export class PetInputComponent implements OnInit {
     })
   })
 
-  constructor() { }
+  constructor(private db: DatabaseServiceService) { }
 
   ngOnInit() {
   }
 
   onSubmit(){
-    //TODO use EventEmitter
+    //documentation said this should use an event emmitter???
     console.warn(this.petForm.value);
+    let petInfo: Pet = this.petForm.value;
+    console.log(petInfo);
+    this.db.addPet(petInfo)
+      .subscribe(pet => console.log(pet));
+    
   }
 
   //a species name can't match the given regular expression
