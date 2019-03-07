@@ -27,6 +27,15 @@ export class DatabaseServiceService {
     );
   }
 
+  getPet(name){
+    console.log("getPet");
+    let url = `http://localhost:3000/api/pet/get/${name}`;
+    return this.http.get<Pet>(url, httpOptions)
+      .pipe(
+        catchError(this.handleError)
+    );
+  }
+
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.

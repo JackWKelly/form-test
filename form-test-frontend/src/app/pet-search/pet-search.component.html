@@ -1,0 +1,25 @@
+<p>
+  Pet Search
+</p>
+<form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+
+    <label>
+      Pet Name:
+      <input type="text" formControlName="petName" required>
+  
+    </label>
+
+  <button type="submit" [disabled]="!searchForm.valid">Submit</button>
+
+</form>
+
+<div *ngIf="petData">
+    <li class="list-group-item" *ngFor="let pet of petData">
+      <pre>Name:  {{pet.petName}}</pre>
+      <pre>Age:  {{pet.petAge}}</pre>
+      <pre>Species:  {{pet.petSpecies}}</pre>
+      <pre>Legs:  {{pet.petLegs}}</pre>
+      <pre>Colour:  {{pet.petColour}}</pre>
+      <pre>Tails:  {{pet.petTail}}</pre>
+    </li>
+  </div>

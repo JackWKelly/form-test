@@ -67,3 +67,12 @@ exports.addPet = function(pet){
     });
 
 }
+
+exports.getPet = function(name){
+    return Pet.findAll({
+        where: {petName: name } })
+            .then(pets => {
+                return pets;
+            })
+    
+}
