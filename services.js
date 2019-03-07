@@ -57,13 +57,23 @@ Pet.sync({force:true}).then(() => {
 });*/
 
 exports.addPet = function(pet){
-    return Pet.create({
-        petName: pet.petName,
-        petAge: pet.petAge,
-        petSpecies: pet.petSpecies,
-        petLegs: pet.petDetails.petLegs,
-        petColour: pet.petDetails.petColour,
-        petTail: pet.petDetails.petTail
+    return sequelize.transaction(function (t){
+        return Pet.create({
+            petName: pet.petName,
+            petAge: pet.petAge,
+            petSpecies: pet.petSpecies,
+            petLegs: pet.petDetails.petLegs,
+            petColour: pet.petDetails.petColour,
+            petTail: pet.petDetails.petTail
+        });
+    })
+    //success
+    .then(function(result){
+        console.log(result);
+    })
+    //rollback
+    .catch(function(err){
+        console.log(err);
     });
 
 }
